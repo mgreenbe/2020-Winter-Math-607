@@ -128,7 +128,9 @@ University of Calgary}
 
     \textbf{Least-Squares Line:}
     \[
-        \hat r(\vx) = \vx\hat{\vbeta},\tag{$*$}
+        \hat r(\vx) = \begin{pmatrix}
+            1&\vx
+        \end{pmatrix}\hat{\vbeta},\tag{$*$}
     \]
     $\hat\vbeta$ is the least-squares solution of
     \[
@@ -169,8 +171,6 @@ University of Calgary}
 %     \end{enumerate}
 %     \end{frame}
     
-    
-
 \subsection{Example: $k$-Nearest Neighbors}
 \begin{frame}{Example 2: $k$-Nearest Neightbor Smoother}
     \setlength\parskip{1em}
