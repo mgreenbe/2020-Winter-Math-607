@@ -1,0 +1,6 @@
+\beamer@sectionintoc {1}{Linear Smoothers}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Definition}{4}{0}{1}
+\beamer@subsectionintoc {1}{2}{Example: Linear Regression}{5}{0}{1}
+\beamer@subsectionintoc {1}{3}{Example: $k$-Nearest Neighbors}{8}{0}{1}
+\beamer@subsectionintoc {1}{4}{Example: Sliding Window}{14}{0}{1}
+\beamer@sectionintoc {2}{Evaluating Smoothers and Tuning Parameters}{19}{0}{2}
