@@ -1,6 +1,10 @@
-\beamer@sectionintoc {1}{Linear Smoothers}{3}{0}{1}
-\beamer@subsectionintoc {1}{1}{Definition}{4}{0}{1}
-\beamer@subsectionintoc {1}{2}{Example: Linear Regression}{5}{0}{1}
-\beamer@subsectionintoc {1}{3}{Example: $k$-Nearest Neighbors}{8}{0}{1}
-\beamer@subsectionintoc {1}{4}{Example: Sliding Window}{14}{0}{1}
-\beamer@sectionintoc {2}{Evaluating Smoothers and Tuning Parameters}{19}{0}{2}
+\beamer@sectionintoc {1}{Regressors/Smoothers}{3}{0}{1}
+\beamer@sectionintoc {2}{Linear Smoothers}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{Definition}{4}{0}{2}
+\beamer@subsectionintoc {2}{2}{Example: Linear Regression}{5}{0}{2}
+\beamer@subsectionintoc {2}{3}{Example: $k$-Nearest Neighbors}{7}{0}{2}
+\beamer@subsectionintoc {2}{4}{Example: Sliding Window}{13}{0}{2}
+\beamer@sectionintoc {3}{Evaluating Smoothers and Tuning Parameters}{18}{0}{3}
+\beamer@subsectionintoc {3}{1}{Prediction Error}{18}{0}{3}
+\beamer@subsectionintoc {3}{2}{Train/Test Split}{19}{0}{3}
+\beamer@subsectionintoc {3}{3}{Cross-Validation}{21}{0}{3}

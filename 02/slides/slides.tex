@@ -64,15 +64,19 @@ University of Calgary}
 \end{frame}
 
 
-\section{Linear Smoothers}
 
-\begin{frame}{Smoothers}
-    \textbf{Smoothers} are regression models for fitting ``smooth'' curves to data.
+\section{Regressors/Smoothers}
+\begin{frame}{Regressors/Smoothers}
+    \setlength\parskip{0.5em}
+    \textbf{Regression Models} or \textbf{Regressors} are models for fitting curves to data.
+
+    \textbf{Smoother} is a synonym for regressor, typically used in the context of nonparametric models.
     \begin{center}
         \includegraphics[scale=0.6]{smoother.pdf}
     \end{center}
 \end{frame}
 
+\section{Linear Smoothers}
 \subsection{Definition}
 \begin{frame}{Linear Smoothers}
     \setlength\parskip{0.5em}
@@ -144,26 +148,26 @@ University of Calgary}
     Thus, $\hat r$ is a linear smoother.
 \end{frame}
 
-\begin{frame}
-    \frametitle{Coding Activity 1}
-    \begin{enumerate}
-        \setlength\parskip{0.5em}
-        \item Mock some data, \[
-            (x_0, y_0),\;\ldots,\;(x_{19}, y_{19}),\qquad x_i\in(0,1),\; y_i\in\RR,
-        \]
-        suitable for linear regression:
-                \begin{enumerate}
-                    \setlength\parskip{0.5em}
-                    \item Choose $\vbeta_0$ and $\beta_1$ uniformly at random from the intervals $(0,1)$ the and $(-1, 0)$, respectively.
-                    \item Choose $x_0,\ldots,x_{19}$ uniformly at random from the interval $(-1, 1)$.
-                    \item Draw a random sample $\epsilon_0,\ldots,\epsilon_{19}$ from $N(0,0.2)$.
-                    \item Set $y_i = \beta_0 + \beta_1 x_i + \epsilon_i$.
-                \end{enumerate}
-            \item Plot $y$ versus $x$. It should look roughly linear.
-            \item Write a function that computes $\vw(x)$ from $x$.
-            \item Plot the graph of $y=\hat r(x)$.
-    \end{enumerate}
-    \end{frame}
+% \begin{frame}
+%     \frametitle{Coding Activity 1}
+%     \begin{enumerate}
+%         \setlength\parskip{0.5em}
+%         \item Mock some data, \[
+%             (x_0, y_0),\;\ldots,\;(x_{19}, y_{19}),\qquad x_i\in(0,1),\; y_i\in\RR,
+%         \]
+%         suitable for linear regression:
+%                 \begin{enumerate}
+%                     \setlength\parskip{0.5em}
+%                     \item Choose $\vbeta_0$ and $\beta_1$ uniformly at random from the intervals $(0,1)$ the and $(-1, 0)$, respectively.
+%                     \item Choose $x_0,\ldots,x_{19}$ uniformly at random from the interval $(-1, 1)$.
+%                     \item Draw a random sample $\epsilon_0,\ldots,\epsilon_{19}$ from $N(0,0.2)$.
+%                     \item Set $y_i = \beta_0 + \beta_1 x_i + \epsilon_i$.
+%                 \end{enumerate}
+%             \item Plot $y$ versus $x$. It should look roughly linear.
+%             \item Write a function that computes $\vw(x)$ from $x$.
+%             \item Plot the graph of $y=\hat r(x)$.
+%     \end{enumerate}
+%     \end{frame}
     
     
 
@@ -355,11 +359,11 @@ University of Calgary}
     The \textbf{sliding window smoother with bandwidth $h>0$} is the estimator of $r$ defined by
     \begin{align*}
         \hat r_h(\vx) 
-        &= \text{average of the $Y_i$ for which $\|\vx - \vx_i\|<h$}\\[0.5ex]
-        &= \frac{\sum_{\|\vx_i - \vx\|< h}Y_i}{\sum_{\|\vx_i - \vx\|< h}1}\\
+        &= \text{average of the $Y_i$ for which $\|\vx - \vx_i\|<h$}\\[1ex]
+        % &= \frac{\sum_{\|\vx_i - \vx\|< h}Y_i}{\sum_{\|\vx_i - \vx\|< h}1}\\
         &= \sum_{i=0}^{n-1} w_i(\vx)Y_i,\quad\text{where}\quad
         w_i(\vx)=\begin{cases}
-            \dfrac1{\#N_h(\vx)}&\text{if $\vx_i\in N_h(\vx)$,}\\[1ex]
+            \dfrac1{\#N_h(\vx)}&\text{if $\vx_i\in N_h(\vx)$,}\\[2ex]
             0&\text{otherwise.}
         \end{cases}
     \end{align*}
@@ -389,7 +393,7 @@ University of Calgary}
     \filldraw[black] (9,0) circle (2pt) node[below] {$x_9$};
 
     \node[red] at (2.5, 1.5) {$\hat r_h(x) = Y_2$};
-    \node[blue] at (6.75, 1.5) {$\hat r_h(x) = \dfrac13(Y_6+Y_7+Y_8)$};
+    \node[blue] at (6.75, 1.5) {$\hat r_h(x) = \dfrac13(Y_6+Y_7+_8)$};
 \end{tikzpicture}
 \end{frame}
 
@@ -420,14 +424,14 @@ University of Calgary}
 
 \section{Evaluating Smoothers and Tuning Parameters}
 
-
+\subsection{Prediction Error}
 \begin{frame}
-    \frametitle{Evaluating Smoothers: Predictive Accuracy}
+    \frametitle{Prediction Error}
     \setlength\parskip{0.75em}
 
-    We evaluate a smoother based on the accuracy of its predictions.
+    We evaluate a regressor based on the accuracy of its predictions.
 
-    Let $\hat r_\cD$ be a smoother trained on the data set $\cD$.
+    Let $\hat r_\cD$ be a regressor trained on the data set $\cD$.
 
     Assume we are in possession of a \textbf{test set},
     $$\cD_\test=\{(\vx_1,Y_1),\;\ldots,\;(\vx_n, Y_n)\},$$
@@ -439,16 +443,30 @@ University of Calgary}
     \]
 \end{frame}
 
+\subsection{Train/Test Split}
+\begin{frame}
+    \frametitle{Train/Test Split}
+    \setlength\parskip{1em}
+
+    \textbf{Split} you data set $\cD$ into two disjoint subsets: A larger \textbf{training set}, $\cD_\train$, and a smaller \textbf{testing set}, $\cD_\test$.
+
+    Train your model on $\cD_\train$, the use $\cD_\test$ to estimate its prediction error.
+
+    Training error typically \textbf{underestimates} prediction error!
+\end{frame}
+
+
 \begin{frame}
     \frametitle{Tuning Model Parameters Using a Test Set}
     \setlength\parskip{1em}
 
-    Given a test set, $\cD_\test$, choose your parameters
+    Given a test set, $$\cD_\test = \{(\vx_1,Y_1),\;\ldots,\;(\vx_n, Y_n)\},$$
+    choose your parameters
     ($k$ for $k$-nearest neighbors, $h$ for sliding window)
     to \textbf{minimize}
     
     \[
-        \text{test error} = \frac1n\sum_{i=1}^n (Y_i - \hat r_\cD(\vx_i))^2,
+        \text{test error} = \frac1n\sum_{i=1}^n (Y_i - \hat r(\vx_i))^2,
     \]
     our proxy for the expected prediction error.
 
@@ -456,164 +474,230 @@ University of Calgary}
     and choose the parameter value giving the smallest test error.
 \end{frame}
 
-\begin{frame}{\textsc{Coding activity 2}}
-    \emph{But}, we can work in an artificial situation where we \emph{do} know $r(x)$:
+\subsection{Cross-Validation}
+\begin{frame}{$K$-Fold Cross Validation}
+    \setlength\parskip{0.75em}
+    \textbf{Data set:}
+    $$\cD = \{(\vx_1,Y_1),\;\ldots,\;(\vx_n, Y_n)\},$$
 
+    When $n$ is small, it may be undesirable to set aside a test set for tuning parameters.
+    \textbf{Cross-validation} offers an alternative.
 
-    \begin{itemize}\setlength{\itemsep}{1ex}
-        \item Choose:
-        \begin{itemize}
-            \item a function, $r(x)$
-            \item $x_1,\ldots,x_n$
-            \item a fine partition, $P$, of an interval containing the $x_i$
-            \item $k$ (or $h$)
-        \end{itemize}
-            \item for $k=1,\ldots,K$
-        \begin{itemize}
-        \item for $j=0,\ldots,J-1$:
-        \begin{itemize}
-            \item Generate $y_i^{(j)}$, $1\leq i\leq n$, by sampling from $N(r_k(x_i), \sigma^2)$.
-            \item Compute the losses $L(\hat r^{(j)}_k(x), r(x))$ at each $x$ in $P$.
-        \end{itemize}
-    \item Average the losses over $j$ to get the risks, $R(\hat r_k(x), r(x))$.
-    \item Average the risks over $x$ to get the average risk, $R(\hat r_k, r)$.
-    \end{itemize}
-    \item Plot $R(\hat r_k, r)$ vs $k$ and choose $k$.
-\end{itemize}
+    Partition $\{1,\ldots,n\}$ into $K$ \textbf{folds}, $I_1,\ldots,I_K$, of roughly equal size:
+    \[
+        \cD = I_1\cup I_2\cup\cdots\cup I_K,\qquad \#I_j\approx \frac nK
+    \]
+    We get $K$ train/test splits:
+    \begin{align*}
+        \text{training set}& =\cD_h^{-j} = \{(\vx_i, Y_i) : i\notin I_j\},&&\text{size }\frac{K-1}Kn\\
+        \text{testing set}& = \cD_h^{j}  = \{(\vx_i, Y_i) : i\in I_j\}&&\text{size }\frac{1}Kn
+    \end{align*}
 \end{frame}
 
-\begin{frame}{\textsc{The bias-variance decomposition}}
+\begin{frame}
+    \setlength\parskip{0.75em}
+    Compute $\hat r_h^{-j}$ by training your model on $\cD_h^{-j}$.
+
+    Estimate the prediction error of $\hat r_h^{-j}$ on the test set $\cD_h^{j}$:
+    \[
+        E_{h,j} = \text{error on $\cD_h^{j}$} = \sum_{i\in I_j}\big(Y_i - \hat r_h^{-j}(\vx_i)\big)^2
+    \]
+
+    Compute the weighted average of these $K$ measurements,
+    giving an overall error measurement for the parameter value, $h$:
+    
+    \begin{block}{Definition}
+        The \textbf{$K$-Fold Cross Validation Score} is
+        \[
+           E_h = \sum_{j=1}^K\frac{\# I_j}{n}\sum_{i\in I_j}\big(Y_i - r_h^{(-I_j)}(x_i)\big)^2.
+        \]
+    \end{block}
+    
+    In practice, $K$ is usually $5$ (\texttt{sklearn}'s default) or $10$ or $n$.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Leave-One-Out Cross-Validation (LOOCV)}
+    \setlength\parskip{0.75em}
+
+    \textbf{Leave-One-Out Cross-Validation} is another name for $n$-fold cross-validation.
+
+    In this case, the folds and testing sets are singletons,
+    \[
+        I_1=\{1\},\;\ldots,\; I_n=\{n\}
+    \]
+    \[
+        \cD_h^1=\{(\vx_1,Y_1)\},\;\ldots,\; \cD_h^n=\{(\vx_n,Y_n)\},
+    \]
+    while the training sets, $\cD_h^{-j}$, have size $n-1$.
 
     \begin{block}{Definition}
-        The \emph{bias of $\hat r(x)$}, as an estimator of $r(x)$, is
+        The \textbf{Leave-One-Out Cross Validation Score} is
         \[
-            \Bias(\hat r(x), r(x)) := \EE[\hat r(x)] - r(x)
+           E_h = \frac1n\sum_{j=1}^n\sum_{i\neq j}\big(Y_i - r_h^{(-j)}(\vx_i)\big)^2.
         \]
     \end{block}
 
-    \begin{block}{Bias-variance decomposition}
-        \[
-            R(\hat r(x), r(x)) = \Var \hat r(x) + \Bias(\hat r(x), r(x))^2
-        \]
-    \end{block}
-
-    \[
-        \text{$\Var \hat r(x)$ big} \;/\; \text{graph of $\hat r$ wiggly} \;/\; \text{overfit}
-        \;/\; \text{undersmoothed}
-    \]
-    \[
-        \text{$\Bias(\hat r(x), r(x))$ big} \;/\; \text{graph of $\hat r$ too flat} \;/\; \text{underfit}
-        \;/\; \text{oversmoothed}
-    \]
 \end{frame}
 
-\begin{frame}{}
-    \includegraphics[scale=0.36]{bias_variance.pdf}
+% \begin{frame}{\textsc{Coding activity 2}}
+%     \emph{But}, we can work in an artificial situation where we \emph{do} know $r(x)$:
 
-    Variance decreases as $k$ increases.
 
-    Bias increases as $k$ increases.
-\end{frame}
+%     \begin{itemize}\setlength{\itemsep}{1ex}
+%         \item Choose:
+%         \begin{itemize}
+%             \item a function, $r(x)$
+%             \item $x_1,\ldots,x_n$
+%             \item a fine partition, $P$, of an interval containing the $x_i$
+%             \item $k$ (or $h$)
+%         \end{itemize}
+%             \item for $k=1,\ldots,K$
+%         \begin{itemize}
+%         \item for $j=0,\ldots,J-1$:
+%         \begin{itemize}
+%             \item Generate $y_i^{(j)}$, $1\leq i\leq n$, by sampling from $N(r_k(x_i), \sigma^2)$.
+%             \item Compute the losses $L(\hat r^{(j)}_k(x), r(x))$ at each $x$ in $P$.
+%         \end{itemize}
+%     \item Average the losses over $j$ to get the risks, $R(\hat r_k(x), r(x))$.
+%     \item Average the risks over $x$ to get the average risk, $R(\hat r_k, r)$.
+%     \end{itemize}
+%     \item Plot $R(\hat r_k, r)$ vs $k$ and choose $k$.
+% \end{itemize}
+% \end{frame}
 
-\begin{frame}{}
-    Define:
-    \[
-        \Var \hat r := \int R(\hat r(x), r(x))\,dx,\qquad \Bias(\hat r, r)^2 := \int\Bias(\hat r(x), r(x))^2\,dx
-    \]
+% \begin{frame}{\textsc{The bias-variance decomposition}}
+
+%     \begin{block}{Definition}
+%         The \emph{bias of $\hat r(x)$}, as an estimator of $r(x)$, is
+%         \[
+%             \Bias(\hat r(x), r(x)) := \EE[\hat r(x)] - r(x)
+%         \]
+%     \end{block}
+
+%     \begin{block}{Bias-variance decomposition}
+%         \[
+%             R(\hat r(x), r(x)) = \Var \hat r(x) + \Bias(\hat r(x), r(x))^2
+%         \]
+%     \end{block}
+
+%     \[
+%         \text{$\Var \hat r(x)$ big} \;/\; \text{graph of $\hat r$ wiggly} \;/\; \text{overfit}
+%         \;/\; \text{undersmoothed}
+%     \]
+%     \[
+%         \text{$\Bias(\hat r(x), r(x))$ big} \;/\; \text{graph of $\hat r$ too flat} \;/\; \text{underfit}
+%         \;/\; \text{oversmoothed}
+%     \]
+% \end{frame}
+
+% \begin{frame}{}
+%     \includegraphics[scale=0.36]{bias_variance.pdf}
+
+%     Variance decreases as $k$ increases.
+
+%     Bias increases as $k$ increases.
+% \end{frame}
+
+% \begin{frame}{}
+%     Define:
+%     \[
+%         \Var \hat r := \int R(\hat r(x), r(x))\,dx,\qquad \Bias(\hat r, r)^2 := \int\Bias(\hat r(x), r(x))^2\,dx
+%     \]
     
-    Integrate the bias-variance decomposition:
-    \[
-        R(\hat r, r) = \Var \hat r + \Bias(\hat r, r)^2
-    \]
+%     Integrate the bias-variance decomposition:
+%     \[
+%         R(\hat r, r) = \Var \hat r + \Bias(\hat r, r)^2
+%     \]
 
-    Since $r$ is unknown, these quantities can only be estimated.
-\end{frame}
+%     Since $r$ is unknown, these quantities can only be estimated.
+% \end{frame}
 
-\begin{frame}{\textsc{Coding activity 3}}
-    \begin{itemize}
-        \item For our running synthetic example, plot 
-        \[
-            R(\hat r_k, r),\; \Var \hat r_k,\; \text{and}\; \Bias(\hat r_k, r)^2
-        \]
-        versus $k$ on the same axes.
+% \begin{frame}{\textsc{Coding activity 3}}
+%     \begin{itemize}
+%         \item For our running synthetic example, plot 
+%         \[
+%             R(\hat r_k, r),\; \Var \hat r_k,\; \text{and}\; \Bias(\hat r_k, r)^2
+%         \]
+%         versus $k$ on the same axes.
 
-        \item Verify the integrated bias-variance decomposition using your computed
-        $R(\hat r_k, r)$, $\Var \hat r_k$, and $\Bias(\hat r_k, r)^2$.
-    \end{itemize}
+%         \item Verify the integrated bias-variance decomposition using your computed
+%         $R(\hat r_k, r)$, $\Var \hat r_k$, and $\Bias(\hat r_k, r)^2$.
+%     \end{itemize}
      
-    Reuse as much of your code from \textsc{coding activity 2} as possible.
-\end{frame}
+%     Reuse as much of your code from \textsc{coding activity 2} as possible.
+% \end{frame}
 
-\begin{frame}{\textsc{Training error}}
-    \begin{block}{Definition}
-        The \emph{empirical risk} or \emph{training error} is
-        \[
-            \frac1n\sum_{i=1}^n L(\hat r(x_i), Y_i).
-        \]
-    \end{block}
-    Empirical risk is not good estimator of $R$: We trained $\hat r$ on the 
-    $(x_i,Y_i)$, making $L(\hat r(x_i), Y_i)$ biased downwards.
-\end{frame}
-
-
+% \begin{frame}{\textsc{Training error}}
+%     \begin{block}{Definition}
+%         The \emph{empirical risk} or \emph{training error} is
+%         \[
+%             \frac1n\sum_{i=1}^n L(\hat r(x_i), Y_i).
+%         \]
+%     \end{block}
+%     Empirical risk is not good estimator of $R$: We trained $\hat r$ on the 
+%     $(x_i,Y_i)$, making $L(\hat r(x_i), Y_i)$ biased downwards.
+% \end{frame}
 
 
-\begin{frame}{\textsc{Leave one out cross-validation}}
-    \begin{block}{Definition}
-        The \emph{leave one out cross validation (LOOCV) score} is
-        \[
-            \hat R(h) := \frac1n\sum_{i=1}^n\big(Y_i - \hat r_h^{\,(-i)}(x_i)\big)^2,
-        \]
-        where $\hat r_h^{\,(-i)}$ is computed using the subdataset of the original one by removing the point $(x_i, Y_i)$.
-    \end{block}
-    \vspace{-1ex}$\hat R(h)$ is typically a good estimator of the average risk of $\hat r_h$:
-    \[
-        \hat R(h) \approx R(\hat r_h, r) + \sigma^2,\quad\text{where}\quad\sigma^2 = \Var Y_i.
-    \]
-    We choose our smoothing parameter to be the one that minimizes $\hat R(h)$:
-    \[
-        h := \argmin_h \hat R(h)
-    \]
-\end{frame}
 
-\begin{frame}{\textsc{Coding activity 4}}
-    For our running example, plot $\hat R(k)$ versus $k$. Compute the $\hat R(k)$ using
-    \texttt{sklearn}'s \texttt{LeaveOneOut} class and the generator returned by its
-    \texttt{split} method.
+
+% \begin{frame}{\textsc{Leave one out cross-validation}}
+%     \begin{block}{Definition}
+%         The \emph{leave one out cross validation (LOOCV) score} is
+%         \[
+%             \hat R(h) := \frac1n\sum_{i=1}^n\big(Y_i - \hat r_h^{\,(-i)}(x_i)\big)^2,
+%         \]
+%         where $\hat r_h^{\,(-i)}$ is computed using the subdataset of the original one by removing the point $(x_i, Y_i)$.
+%     \end{block}
+%     \vspace{-1ex}$\hat R(h)$ is typically a good estimator of the average risk of $\hat r_h$:
+%     \[
+%         \hat R(h) \approx R(\hat r_h, r) + \sigma^2,\quad\text{where}\quad\sigma^2 = \Var Y_i.
+%     \]
+%     We choose our smoothing parameter to be the one that minimizes $\hat R(h)$:
+%     \[
+%         h := \argmin_h \hat R(h)
+%     \]
+% \end{frame}
+
+% \begin{frame}{\textsc{Coding activity 4}}
+%     For our running example, plot $\hat R(k)$ versus $k$. Compute the $\hat R(k)$ using
+%     \texttt{sklearn}'s \texttt{LeaveOneOut} class and the generator returned by its
+%     \texttt{split} method.
     
-    Which $k$ that minimizes $\hat R(k)$? Compare with the results of \textsc{coding activity 2}.
+%     Which $k$ that minimizes $\hat R(k)$? Compare with the results of \textsc{coding activity 2}.
 
-    For this optimal value of $k$, plot $\hat r_k^{(-i)}(x_i)$ versus $x_i$ and $r(x)$ versus $x$ on the same axes.
+%     For this optimal value of $k$, plot $\hat r_k^{(-i)}(x_i)$ versus $x_i$ and $r(x)$ versus $x$ on the same axes.
 
-    \textit{Remark:} \texttt{LeaveOneOut} is fairly low-level; \texttt{sklearn} provides more 
-    convenient ways to tune hyperparameters using cross validation.
-    Sometimes, though, it's necessary to work with the lower-level constructs.
-\end{frame}
+%     \textit{Remark:} \texttt{LeaveOneOut} is fairly low-level; \texttt{sklearn} provides more 
+%     convenient ways to tune hyperparameters using cross validation.
+%     Sometimes, though, it's necessary to work with the lower-level constructs.
+% \end{frame}
 
-\begin{frame}{\textsc{$K$-fold cross validation}}
-Partition $\{1,\ldots,n\}$ into $K$ \emph{folds}, $I_1,\ldots,I_K$, of roughly equal size.
+% \begin{frame}{\textsc{$K$-fold cross validation}}
+% Partition $\{1,\ldots,n\}$ into $K$ \emph{folds}, $I_1,\ldots,I_K$, of roughly equal size.
 
-Let $\hat r_h^{(-I_j)}$ be the smoother computed using the subdataset of the original one
-obtained by removing $(x_i, Y_i)$, for $i\in I_j$.
+% Let $\hat r_h^{(-I_j)}$ be the smoother computed using the subdataset of the original one
+% obtained by removing $(x_i, Y_i)$, for $i\in I_j$.
 
-\begin{block}{Definition}
-    The \emph{$K$-fold cross validation score is}
-    \[
-        \hat{R}_K(h) := \sum_{j=1}^K\frac1{|I_j|}\sum_{i\in I_j}\big(Y_i - r_h^{(-I_j)}(x_i)\big)^2
-    \]
-\end{block}
+% \begin{block}{Definition}
+%     The \emph{$K$-fold cross validation score is}
+%     \[
+%         \hat{R}_K(h) := \sum_{j=1}^K\frac1{|I_j|}\sum_{i\in I_j}\big(Y_i - r_h^{(-I_j)}(x_i)\big)^2
+%     \]
+% \end{block}
 
-We can use $\hat{R}_K$ in place of $\hat{R}$ to select a smoothing parameter.
+% We can use $\hat{R}_K$ in place of $\hat{R}$ to select a smoothing parameter.
 
-In practice, $K$ is usually $5$ (\texttt{sklearn}'s default) or $10$.
-\end{frame}
+% In practice, $K$ is usually $5$ (\texttt{sklearn}'s default) or $10$.
+% \end{frame}
 
-\begin{frame}{\textsc{Coding activity 5}}
-    Find the values of $k$ that minimnize the $3$-, $5$-, and $10$-fold cross validation scores.
-    Compute these scores using \texttt{cross\_val\_score} from \texttt{sklearn.model\_selection}.
+% \begin{frame}{\textsc{Coding activity 5}}
+%     Find the values of $k$ that minimnize the $3$-, $5$-, and $10$-fold cross validation scores.
+%     Compute these scores using \texttt{cross\_val\_score} from \texttt{sklearn.model\_selection}.
     
-    Confirm your results from \textsc{coding activity 4} by performing LOOCV as 
-    $n$-fold cross validation, $n$ being the size of the dataset.
-\end{frame}
+%     Confirm your results from \textsc{coding activity 4} by performing LOOCV as 
+%     $n$-fold cross validation, $n$ being the size of the dataset.
+% \end{frame}
 
 \end{document}
