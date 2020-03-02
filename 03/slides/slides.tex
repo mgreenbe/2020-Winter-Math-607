@@ -325,9 +325,19 @@ This is a \textbf{weighted average} of $y_1,\ldots,y_n$ with $y_i$ having weight
     \item TV, Radio, and Sales columns only
     \item 160 training samples, 40 testing samples
 \end{itemize}
+\end{frame}
 
-
-    
-
+\section{Classfication}
+\begin{frame}
+    \frametitle{Binary Classification}
+    \begin{itemize}
+        \setlength\itemsep{1em}
+        \item Just like regression, but targets in $\{0,1\}$ instead of $\RR$.
+        \item $(X,Y)$ jointly distributed, $X\in\RR^n$, $Y\in\{0,1\}$
+        \item $r(X) = \EE[Y|X] = P[Y=1|X] \in [0,1]$
+        \item Bayes Estimator: $$\hat r_{\text{Bayes}} = \begin{cases}
+        1&\text{if $P[Y=1|X]\geq 1/2$,}\\0&\text{otherwise.}
+        \end{cases}$$
+    \end{itemize}
 \end{frame}
 \end{document}

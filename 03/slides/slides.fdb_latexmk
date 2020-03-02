@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1583167765 "/Users/mgreenbe/teaching/2020-winter/607/03/slides/slides.tex" "slides.pdf" "slides" 1583167767
-  "/Users/mgreenbe/teaching/2020-winter/607/03/slides/slides.tex" 1583167764 10380 73113d3caf9e3bce3a8ab732df926028 ""
+["pdflatex"] 1583192922 "/Users/mgreenbe/teaching/2020-winter/607/03/slides/slides.tex" "slides.pdf" "slides" 1583192924
+  "/Users/mgreenbe/teaching/2020-winter/607/03/slides/slides.tex" 1583192922 10906 668cf2bf74218b72e84ad3c5f4de7d20 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc" 1202520719 3486 c7eadf5dcc57b3b2d11736679f6636ba ""
   "/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc" 1202520719 2405 5dcf2c1b967ee25cc46c58cd52244aed ""
   "/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc" 1202520719 2840 216e6e45ad352e2456e1149f28885bee ""
@@ -271,16 +271,16 @@
   "/usr/local/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1582397337 8259198 58d504daf274581136fd660af303b4ff ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
   "advertising.pdf" 1583096207 48625 d63fafb225b0c0e482a8fc0dc61e0686 ""
-  "slides.aux" 1583167767 4383 233cebbacf06ca0ab435bfb3e53f49e8 "pdflatex"
-  "slides.nav" 1583167767 2438 492d6bc527d3bd4c1f6b3b661b9c9c50 "pdflatex"
-  "slides.out" 1583167767 381 7f980a5df5355acebe4ef693fed7bf4a "pdflatex"
-  "slides.tex" 1583167764 10380 73113d3caf9e3bce3a8ab732df926028 ""
-  "slides.toc" 1583167767 347 e8d581b15d7d2d1d330efa6cb66e2890 "pdflatex"
+  "slides.aux" 1583192924 4796 fc428cc254d4db2ed1b6c35e02b44dbc "pdflatex"
+  "slides.nav" 1583192924 2693 faa7b1ffdb844bc01e289a6e4f46dc52 "pdflatex"
+  "slides.out" 1583192924 429 875099870549c206eba6de0c14c8549c "pdflatex"
+  "slides.tex" 1583192922 10906 668cf2bf74218b72e84ad3c5f4de7d20 ""
+  "slides.toc" 1583192924 397 3c3872f36574ebc5e69f89baca971dc8 "pdflatex"
   (generated)
   "slides.aux"
-  "slides.snm"
-  "slides.pdf"
   "slides.log"
-  "slides.nav"
+  "slides.pdf"
   "slides.toc"
   "slides.out"
+  "slides.nav"
+  "slides.snm"
