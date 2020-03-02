@@ -1,0 +1,6 @@
+\beamer@sectionintoc {1}{Kernel Smoothers}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Weighted Averages}{3}{0}{1}
+\beamer@subsectionintoc {1}{2}{The Boxcar Kernel Smoother}{6}{0}{1}
+\beamer@subsectionintoc {1}{3}{Kernel Functions}{9}{0}{1}
+\beamer@subsectionintoc {1}{4}{Kernel Smoothers}{12}{0}{1}
+\beamer@subsectionintoc {1}{5}{Examples}{13}{0}{1}

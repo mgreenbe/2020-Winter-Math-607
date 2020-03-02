@@ -59,21 +59,95 @@ University of Calgary}
 \frame{\titlepage}
 
 \begin{frame}{This Evening's Agenda}
-    \setlength\parskip{0.75em}
+    \setlength\parskip{0.5em}
     \tableofcontents
 \end{frame}
 
+\section{Kernel Smoothers}
+\subsection{Weighted Averages}
 \begin{frame}
-    \frametitle{Indicator Functions}
+    \frametitle{Weighted Averages}
+    \setlength\parskip{0.75em}
+
+    Suppose I'm computing the course grade for my MATH 307 (Complex Analysis I) students.
+    
+    Their course grades (G) are computed based on three assignments (A1, A2, A3), two tests (T1, T2), and a final exam (F).
+    
+    In the course grade computation, a midterm is assigned twice the weight of an assignment and the final exam is assigned twice the weight of a midterm.
+
+    Fill in the grade column. (All scores are percentages.)
+
+    \begin{center}
+        \begin{tabular}{l|ccc|cc|c|c}
+            \textbf{Student} & \textbf{A1} & \textbf{A2} & \textbf{A3} & \textbf{T1} & \textbf{T2} &\textbf{F} & \textbf{G}\\\hline 
+            James&70&80&50&75&80&40&\\
+            Anton&60&90&95&70&90&85&\\
+            Hiraku&90&95&100&95&95&100\\
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+The course grades are \textbf{weighted averages} of the students' scores
+on the individual course components.
+\[
+    \text{G} = \frac{\textcolor{blue}{1}\cdot\text{A1} + 
+    \textcolor{blue}{1}\cdot\text{A2} + 
+    \textcolor{blue}{1}\cdot\text{A3} + 
+    \textcolor{orange}{2}\cdot\text{T1} + 
+    \textcolor{orange}{2}\cdot\text{T1} + 
+    \textcolor{magenta}{4}\cdot\text{F}}
+    {\textcolor{blue}{1} +
+    \textcolor{blue}{1} +
+    \textcolor{blue}{1} +
+    \textcolor{orange}{2} +
+    \textcolor{orange}{2} +
+    \textcolor{magenta}{4}}
+\]
+James:
+\[
+    G = \frac{1\cdot 70 + 1\cdot 80 + 1\cdot 50 + 2\cdot 75 + 2\cdot 75 + 4\cdot 40}
+    {1+1+1+2+2+4} = 60.00
+\]
+Anton:
+\[
+    G = \frac{1\cdot 60 + 1\cdot 90 + 1\cdot 95 + 2\cdot 70 + 2\cdot 90 + 4\cdot 85} 
+    {1+1+1+2+2+4} = 82.27
+\]
+Hiraku:
+\[
+    G = \frac{1\cdot 90 + 1\cdot 95 + 1\cdot 100 + 2\cdot 95 + 2\cdot 95 + 4\cdot 100} 
+    {1+1+1+2+2+4} = 96.81
+\]
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{0.75em}
+    Given \textbf{weights} $w_1,\ldots,w_n$, the associated 
+    The \textbf{weighted average} of $x_1,\ldots,x_n$ is
+    \[
+        \frac{\sum_i w_ix_i}{\sum_i w_i}=\frac{w_1x_1+\cdots + w_nx_n}{w_1+\cdots+w_n}.
+    \]
+
+    When the weights are all equal, say $w_1=\cdots=w_n=w$, the weighted average is just the usual average:
+    \[
+        \frac{\sum_i wx_i}{\sum_iw} = \frac{w\sum_ix_i}{nw}=\frac{\sum_ix_i}{n}
+    \]
+    \end{frame}
+
+\subsection{The Boxcar Kernel Smoother}
+\begin{frame}
+    \frametitle{Boxcar Kernel}
     \setlength\parskip{0.75em}
 
     Define the \textbf{Boxcar Kernel} by
-    \[
-        B(x) = \begin{cases}
+    \begin{align*}
+        B(x) &= \frac12\One_{(-1, 1)}(x)\\[1ex]
+        &=\begin{cases}
             \frac12&\text{if $-1<x<1$,}\\
             0&\text{otherwise.}
         \end{cases}\qquad (\vx\in\RR).
-    \]
+    \end{align*}
 
     \begin{center}
     \begin{tikzpicture}
@@ -100,7 +174,7 @@ University of Calgary}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Sliding Window Smoother}
+    \frametitle{Boxcar Kernel Smoother}
     \setlength\parskip{0.75em}
 
     \textbf{Data set:}
@@ -110,29 +184,22 @@ University of Calgary}
     
     \textbf{Boxcar Kernel Smoother:}
     \[
-    \hat r_{h,\cD}(\vx) = \frac{\displaystyle\quad\sum_{i=1}^n y_i\,B\left(\frac{\vx - \vx_i}h\right)\quad}    
-    {\displaystyle\sum_{i=1}^n B\left(\frac{\vx - \vx_i}h\right)}
-    %\hat r_{h,\cD}(\vx) = \frac1{\# I(\vx)}\sum_{i\in I(\vx)} y_i
+    \hat r(\vx) = \frac{\displaystyle\quad\sum_{i=1}^n y_i\,B\left(\frac{\|\vx - \vx_i\|}h\right)\quad}    
+    {\displaystyle\sum_{i=1}^n B\left(\frac{\|\vx - \vx_i\|}h\right)}
     \]
-    \textbf{Generalization:} Replace $B$ by different ``kernel'' function.
+    This is a \textbf{weighted average} of the $y_i$. All $y_i$ for which $\vx_i$ is within a distance $h$ of $\vx$ are assigned weight $w_i=1$; all others are assigned weight $w_i=0$.
+
 \end{frame}
 
 \begin{frame}
+\setlength\parskip{0.75em}
 \begin{align*}
-B\left(\frac{x_i - x}h\right) &= \begin{cases}
-    1&\text{if $-1<\dfrac{x_i-x}h$}<1\\[1ex]
+B\left(\frac{\|x_i - x\|}h\right) &= \begin{cases}
+    1&\text{if $\|x_i-x\|<h$}\\
     0&\text{otherwise}
 \end{cases}\\[1ex]
-&= \begin{cases}
-    1&\text{if $-h<x_i-x<h$}\\[1ex]
-    0&\text{otherwise}
-\end{cases}\\[1ex]
-&= \begin{cases}
-    1&\text{if $x-h<x_i<x+h$}\\[1ex]
-    0&\text{otherwise}
-\end{cases}
 \end{align*}
-    
+
 \begin{tikzpicture}
             \draw (0, -0.5) -- (0, 1.5);
             \draw (-0.15, 1) node[left] {$\frac12$} -- (0.15, 1);
@@ -141,29 +208,29 @@ B\left(\frac{x_i - x}h\right) &= \begin{cases}
             \draw (2, 0.15) -- (2, -0.15);
             \node at (2, -0.46) {$x$};
             \draw (3, 0.15) -- (3, -0.15) node[below] {$\;\;x+h$};
-            \draw[very thick, blue] (-3.8, 0)  node[black, above right] {$y=B\left(\dfrac{t-x}h\right)$}-- (1, 0) -- (1, 1) -- (3, 1) -- (3, 0) --
+            \draw[very thick, blue] (-3.8, 0)  node[black, above right] {$y=B\left(\dfrac{|t-x|}h\right)$}-- (1, 0) -- (1, 1) -- (3, 1) -- (3, 0) --
             (4.5, 0);
 \end{tikzpicture}
+
+
+\bigskip
+\textbf{Note:} $\text{Boxcar Kernel Smoother} = \text{Sliding Window Smoother}$
+
+\textbf{Generalization:} Replace $B$ with another ``kernel'' function.
+
 \end{frame}
 
-\begin{frame}
-\begin{align*}
-    \sum_{i=1}^n B\left(\frac{x_i - x}h\right) &= \text{\# of $x_i$ such that $x-h < x_i < x+h$}
-\end{align*}
-    
-
-\end{frame}
-
+\subsection{Kernel Functions}
 \begin{frame}
     \frametitle{Kernel Functions}
     \setlength\parskip{0.75em}
 
-    $K(\vx)$ is a \textbf{kernel function} if
+    $K(x)$ is a \textbf{kernel function} if
     \begin{enumerate}
         \setlength\parskip{0.75em}
-        \item $K(\vx)\geq 0$
-        \item $K(-\vx)=K(\vx)$
-        \item $\displaystyle \int_{\RR^n}K(\vx)d\vx = 1$
+        \item $K(x)\geq 0$
+        \item $K(-x)=K(x)$
+        \item $\displaystyle \int_{-\infty}^\infty K(x)\,dx = 1$
     \end{enumerate}
 \end{frame}
 
@@ -212,7 +279,55 @@ B\left(\frac{x_i - x}h\right) &= \begin{cases}
         \end{axis}
     \end{tikzpicture}
 \end{center}
-
 \end{frame}
 
+\subsection{Kernel Smoothers}
+\begin{frame}
+    \frametitle{Kernel Smoothers}
+\begin{definition}
+    The \textbf{kernel smoother} associated to the data set
+    \[
+    \cD = \{(\vx_1,y_1),\;(\vx_1,y_1),\;\ldots,\;(\vx_n, y_n)\},
+    \]
+    a kernel function $K$, and a bandwidth $h>0$ 
+    is the function $\hat{r}$ defined by
+    \[
+        \hat r(\vx) = \frac{\displaystyle\quad\sum_{i=1}^n y_i\,K\left(\frac{\|\vx - \vx_i\|}h\right)\quad}    
+        {\displaystyle\sum_{i=1}^n K\left(\frac{\|\vx - \vx_i\|}h\right)}
+    \]
+\end{definition}
+
+This is a \textbf{weighted average} of $y_1,\ldots,y_n$ with $y_i$ having weight $$w_i=K\left(\dfrac{\|\vx - \vx_i\|}h\right).$$
+\end{frame}
+\subsection{Examples}
+\begin{frame}
+    \frametitle{Comparison of Regression Models}
+    \includegraphics[scale=0.32]{advertising.pdf}
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{0.75em}
+
+    \begin{center}
+    \begin{tabular}{rcc}
+        \textbf{Model} & \textbf{Training MSE} & \textbf{Testing MSE}\\[1ex]\hline
+        Linear Regression & 2.10 & 5.78\\[1ex]
+        Polynomial Regression & 0.51 & 2.51\\[1ex]
+        k-Nearest Neighbors ($k=3$) & 0.49 & 1.82\\[1ex]
+        Gaussian Kernel ($h=6$) & 0.21 & 1.13\\\hline
+    \end{tabular}
+\end{center}
+
+\begin{itemize}
+    \setlength\parskip{0.75em}
+
+    \item \texttt{advertising.csv}
+    \item TV, Radio, and Sales columns only
+    \item 160 training samples, 40 testing samples
+\end{itemize}
+
+
+    
+
+\end{frame}
 \end{document}
