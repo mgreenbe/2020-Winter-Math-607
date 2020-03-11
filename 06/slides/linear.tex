@@ -1,0 +1,428 @@
+\documentclass{beamer}
+
+\usepackage{graphicx, algpseudocode, algorithm}
+
+\makeatletter
+\renewcommand{\fnum@algorithm}{\fname@algorithm}
+\makeatother
+
+\usepackage{graphicx, amsmath, amssymb}
+
+% \input{../../../../texmacros/commands.tex}
+
+\newcommand{\vu}{\boldsymbol{u}}
+\newcommand{\vv}{\boldsymbol{v}}
+\newcommand{\vw}{\boldsymbol{w}}
+\newcommand{\vx}{\boldsymbol{x}}
+\newcommand{\vzero}{\boldsymbol{0}}
+
+\newcommand{\RR}{\mathbb{R}}
+
+\usetheme{Madrid}
+
+\DeclareMathOperator{\RSS}{RSS}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator*{\Argmin}{argmin}
+\DeclareMathOperator*{\Argmax}{argmax}
+
+\begin{document}
+
+\setlength{\parskip}{1em}
+\begin{frame}
+    \title{Linear separation and feature maps}
+    \date{DATA 607 --- Session 6 --- 11/03/2020}
+    \maketitle
+\end{frame}
+
+\begin{frame}{Lines in $\RR^2$: Direction vectors}
+    A \underline{line in $\RR^2$} is a set of points of the form
+    \[
+        L_{\vu, \vv} := \{\vu + t\vv : t\in\RR\},
+    \]
+    where
+    \[
+        \vu=\begin{bmatrix}
+            u_1\\u_2
+        \end{bmatrix},\quad
+        \vv=\begin{bmatrix}
+            v_1\\v_2
+        \end{bmatrix}\in\RR^2,\quad
+        \vv\neq \vzero=\begin{bmatrix}
+            0\\0
+        \end{bmatrix}.
+    \]
+
+    Note that $\vu=\vu + 0\vv\in L_{\vu, \vv}$.
+
+    $L_{\vu, \vv}$ is called the line through $\vu$ with \underline{direction vector} $\vv$.
+
+    \begin{itemize}
+        \item $\vu'\in L_{\vu, \vv} \Longrightarrow L_{\vu', \vv}=L_{\vu', \vv}$
+        \item $\vv'=c\vv,\; c\in\RR,\; c\neq 0 \Longrightarrow L_{\vu, \vv'}=L_{\vu, \vv}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lines in $\RR^2$: Half-planes; sides; normal vectors}
+
+
+    \underline{Dot product}:
+    \[
+        \vu\cdot\vv = \begin{bmatrix}
+            u_1\\u_2
+        \end{bmatrix}\cdot\begin{bmatrix}
+            v_1\\v_2
+        \end{bmatrix} = u_1 v_1 + u_2 v_2\in\RR
+    \]
+    $\vu$ and $\vv$ are \underline{orthogonal} or \underline{perpendicular}.
+
+    $\vw$ is a \underline{normal vector} to $L_{\vu, \vv}$ if $\vv\cdot\vw = 0$.
+
+
+\end{frame}
+
+\begin{frame}{Lines in $\RR^2$: Half-planes and sides}
+    If you delete a line, $L$, from $\RR^2$, you're left with two \underline{half-planes} called the \underline{sides} of $L$.
+
+    If $\vw$ is a nonzero normal vector to $L_{\vu, \vv}$, then the sets
+    \[
+        H_{\vu, \vw}^- =
+        \{\vx : \vw\cdot(\vx - \vu) < 0\}
+        \quad\text{and}\quad
+        H_{\vu, \vw}^+ = \{\vx : \vw\cdot(\vx - \vu) > 0\}
+    \]
+    are the sides of $L_{\vu, \vv}$.
+
+    The normal vector $\vw$, plotted with its tail on $L_{\vu, \vv}$, points into $H_{\vu, \vw}^+$.
+\end{frame}
+
+\begin{frame}{Linear separation}
+    Let
+    \[
+        D=\big\{(\vx_1, y_1), (\vx_2, y_2),\ldots, (\vx_n, y_n)\big\}
+    \]
+    be a dataset, where $\vx_i\in \RR^2$ and $y_i\in \{-1, 1\}$.
+
+    Let
+    \[
+        D^-=\big\{(\vx_i, y_i)\in D : y_i=-1\big\},
+        \quad
+        D^+=\big\{(\vx_i, y_i)\in D : y_i=+1\big\}
+    \]
+
+    Let $L$ be a line in $\RR^2$. We say that \underline{$L$ separates $D$} if $D^-$ and $D^+$
+    are contained in opposite sides of $L$.
+
+    We say that $D$ is \underline{linearly separable} if there is a line $L$ that separates $D$.
+\end{frame}
+
+\begin{frame}{}
+
+    \textbf{Not all datasets are linearly separable:} The dataset
+    \[
+        D := \Big\{\big((0, 0), 0\big), \big((1, 0), 1\big),
+        \big((1, 1), 0\big), \big((0, 1), 1\big) \Big\}
+    \]
+    is not linearly separable.
+
+    \textbf{Linear separators need not be unique:} The linear separators of
+    \[
+        D := \Big\{\big((0, -1\big), 0), \big((0, 1), 1\big) \Big\}
+    \]
+    are precisely the lines
+    \[
+        y=mx+b,\quad b\in (-1, 1).
+    \]
+
+
+
+\end{frame}
+
+\begin{frame}{Finding linear separators}
+    \textbf{Problem:}
+    Given a dataset, $D$, find a vector $\vu$ and a nonzero vector $\vw$
+    such that
+    \[
+        D\cap H_{\vu, \vw}^+ = D^+
+        \quad\text{and}\quad
+        D\cap H_{\vu, \vw}^- = D^-
+    \]
+    or show that no such $\vu$ and $\vw$ exist.
+
+    We'll begin by analyzing a special case:
+
+    \textbf{Special case:} Given a dataset $D$, find a nonzero vector $\vw$
+    such that
+    \[
+        D\cap H_{\vzero, \vw}^+ = D^+
+        \quad\text{and}\quad
+        D\cap H_{\vzero, \vw}^- = D^-
+    \]
+    $L_{\vzero, \vw}$ does \textbf{not} separate $D$ if and only if
+    \[
+        D^-\cap H_{\vzero, \vw}^+\neq\varnothing
+        \quad\text{or}\quad
+        D^+\cap H_{\vzero, \vw}^-\neq\varnothing,
+    \]
+    ...
+\end{frame}
+
+\begin{frame}{}
+
+    ...or, equivalently, if and only if
+    \[
+        \Big(y_i = -1\quad\text{and}\quad \vw\cdot\vx_i >0\Big)
+        \quad\text{or}\quad
+        \Big(y_i = +1\quad\text{and}\quad \vw\cdot\vx_i <0\Big)
+    \]
+    for some $i$, or, equivalently, if and only if
+    \[
+        y_i (\vw\cdot\vx_i) <0
+    \]
+    for some $i$, or, equivalently, if and only if
+    \[
+        \min(y_i (\vw\cdot\vx_i), 0) < 0
+    \]
+    for some $i$, or, equivalently,
+    \[
+        \sum_i\min(y_i (\vw\cdot\vx_i), 0) < 0,
+    \]
+    or, equivalently, if and only if
+    \[
+        \sum_i\max(-y_i (\vw\cdot\vx_i), 0) > 0.
+    \]
+\end{frame}
+
+\begin{frame}
+    View the term
+    \[
+        L(\vw, \vx_i, y_i) :=\max(-y_i(\vw\cdot\vx_i), 0)
+    \]
+    as a \textbf{penalty} or \textbf{loss} for $\vx_i$ being misclassified by $\vw$,
+    i.e., lying on the wrong side of the line through $\vzero$ normal to $\vw$.
+
+    Assume $\vx_i$ is correctly classified, then
+    \[
+        \Big(y_i = -1\quad\text{and}\quad \vw\cdot\vx_i <0\Big)
+        \quad\text{or}\quad
+        \Big(y_i = +1\quad\text{and}\quad \vw\cdot\vx_i >0\Big),
+    \]
+    in which case $y_i(\vw\cdot\vx_i)>0$ and
+    \[
+         -y_i(\vw\cdot\vx_i) < 0.
+    \]
+    Thus, the penalty assessed for $\vx_i$ being misclassified by $\vw$
+    is
+    \[
+        L(\vw, \vx_i, y_i) = \max(-y_i(\vw\cdot\vx_i), 0) = 0,
+    \]
+    appropriate since, by hypothesis, $\vx_i$ is classified correctly!
+\end{frame}
+
+\begin{frame}{}
+    Conversely, Assume $\vx_i$ is correctly classified, then
+    \[
+        \Big(y_i = -1\quad\text{and}\quad \vw\cdot\vx_i >0\Big)
+        \quad\text{or}\quad
+        \Big(y_i = +1\quad\text{and}\quad \vw\cdot\vx_i <0\Big),
+    \]
+    in which case $y_i(\vw\cdot\vx_i)<0$ and
+    \[
+         -y_i(\vw\cdot\vx_i) > 0.
+    \]
+    Thus, the penalty assessed for $\vx_i$ being misclassified by $\vw$
+    is strictly positive:
+    \[
+        L(\vw, \vx_i, y_i) = \max(-y_i(\vw\cdot\vx_i), 0) > -y_i(\vw\cdot\vx_i).
+    \]
+    Define the \textbf{cost} associated with $\vw$ by
+    \[
+        C(D, \vw) = \sum_i L(\vw, \vx_i, y_i)
+        = \sum_i \max(-y_i(\vw\cdot\vx_i), 0).
+    \]
+    Then $L(\vw)$ separates $D$ if and only if \[C(D, \vw)=0.\]
+\end{frame}
+
+\begin{frame}{General case}
+    \begin{align*}
+        L(\vu, \vw, \vx_i, y_i) &=\sum_i \max(-y_i(\vw\cdot(\vx_i - \vu)), 0)\\
+        \\
+        C(D, \vu, \vw) &= \sum_i L(\vu, \vw, \vx_i, y_i)\\
+        &=\sum_i \max(-y_i(\vw\cdot(\vx_i - \vu)), 0)
+    \end{align*}
+
+    Find
+    \[
+        \Argmin_{\vu, \vw} C(D, \vu, \vw).
+    \]
+\end{frame}
+
+\begin{frame}{The Perceptron Algorithm}
+    \[
+        D=\big\{(\vx_1, y_1), (\vx_2, y_2),\ldots, (\vx_n, y_n)\big\}
+    \]
+    Suppose that $D$ is linearly separable, i.e.,
+    that there is unit vector a $\vw\in\RR^n$ such that
+    \[
+        \sign(\vw\cdot \vx_i) = y_i
+    \]
+    for all $i$, or, equivalently, that
+    \[
+        y_i(\vw\cdot \vx_i) > 0
+    \]
+    for all $i$.
+\end{frame}
+
+% \begin{frame}{}
+%     Define a sequence $\vw_0,\vw_1,\ldots$ of vectors in $\RR^n$ by:
+%     \begin{algorithmic}[1]
+%         \State $\vw_0 \gets \vzero$
+%         \While{blah}
+%         blah
+%         \EndWhile
+%     \end{algorithmic}
+    
+%     \begin{itemize}
+%         \item $\vw_0 = \vzero$
+%         \item while $y_i(\vw_k\cdot \vx_i) \leq 0$ for some $i$:
+%         \item 
+%     \end{itemize}
+% \end{frame}
+
+\begin{frame}{}
+    Define a sequence $\vw_0,\vw_1,\ldots$ of vectors in $\RR^n$ by:
+    \begin{algorithm}[H]
+        \caption{The Perceptron Algorithm}
+    \begin{algorithmic}[1]
+        \State $k \gets 0$
+        \State $\vw_0 \gets \vzero$
+        \While{$y_i(\vw_k\cdot \vx_i) \leq 0$ for some $i$}
+            \State $k \gets k + 1$
+            \State $i_k\gets \min\{i : y_i(\vw_{k-1}\cdot \vx_i) \leq 0\}$
+            \State $\vw_k \gets \vw_{k-1} + y_{i_k}\vx_{i_k}$
+        \EndWhile
+    \end{algorithmic}
+\end{algorithm}
+Note that $i_1=1$.
+
+\textbf{Theorem:} (Rosenblatt, 1957)
+The perceptron algorithm terminates after $k<R^2/r^2$ steps.
+\end{frame}
+
+\begin{frame}{}
+    \textbf{Proof:} Let $k$ be such that $y_{i_k}(\vw_{k-1}\cdot\vx_{i_k})\leq 0$.
+
+    Lower bound on $\|\vw_k\|^2$:
+
+    Set
+    \[
+        R = \max_i\|\vx_i\|>0.
+    \]
+
+    \vspace{-2em}\begin{align*}
+        \|\vw_k\|^2 &= \|\vw_{k-1} + y_{i_k}\vx_{i_k}\|^2\\
+        &= \|\vw_{k-1}\|^2 + \|\vx_{i_k}\|^2 + 2y_{i_k}(\vw_{k-1}\cdot\vx_{i_k})\\
+        &\geq \|\vw_{k-1}\|^2 + \|\vx_{i_k}\|^2\\
+        &\geq \|\vw_{k-1}\|^2 + R^2\\
+        &\geq \|\vw_{k-2}\|^2 + 2R^2\\
+        &\;\;\vdots\\
+        &\geq \|\vw_0\|^2 + kR^2\\
+        &= kR^2
+    \end{align*}
+\end{frame}
+
+\begin{frame}{}
+    Upper bound on $\|\vw_k\|^2$:
+ 
+    Set
+    \[
+        r = \min_i |\vw\cdot \vx_i|>0.
+    \]
+
+    \vspace{-2em}\begin{align*}
+        \vu\cdot \vw_k &= \vu\cdot(\vw_{k-1} + y_{i_k}\vx_{i_k})\\
+        &= \vu\cdot \vw_{k-1} + y_{i_k}(\vu\cdot \vx_{i_k})\\
+        &\geq \vu\cdot \vw_{k-1} + r\\
+        &\geq \vu\cdot \vw_{k-2} + 2r\\
+        &\;\;\vdots\\
+        &\geq \vu\cdot\vw_0 + kr\\
+        &= kr
+    \end{align*}
+
+    \vspace{-2em}\[
+        kr\leq \vu\cdot\vw_k\leq \|\vu\|\|\vw_k\| = \|\vw_k\|
+    \]
+
+    \vspace{-2em}\[
+        k^2r^2\leq \|\vw_k\|^2
+    \]
+\end{frame}
+
+\begin{frame}{}
+    \[
+        k^2r^2\leq \|\vw_k\|^2\leq kR^2
+    \]
+
+    \[
+        kr^2\leq \|\vw_k\|^2\leq R^2
+    \]
+
+    \[
+        k\leq \frac{R^2}{r^2}
+    \]
+\end{frame}
+
+\begin{frame}{Feature maps}
+    What do we do if our data isn't linearly separable?
+
+    Embed your data in a higher dimensional space in which it is linearly separable.
+
+    The higher dimensional space is called \textbf{feature space}
+    and the function mapping \textbf{data space} ---
+    the ambient space of our data ---
+    into this feature space is called a \textbf{feature map}.
+    
+    
+\end{frame}
+
+\begin{frame}
+    Consider the linearly inseparable dataset
+    \[
+        D := \Big\{\big((0, 0), 0\big), \big((1, 0), 1\big),
+        \big((1, 1), 0\big), \big((0, 1), 1\big) \Big\}
+    \]
+    Define a \textbf{feature map} $\phi:\RR^2\to \RR^3$ by
+    \[
+        \phi(x_1, x_2) = \big(x_1, x_2, (x_1 - x_2)^2\big)
+    \]
+    Then
+    \[
+        \phi(D) = \Big\{\big((0, 0, 0), 0\big), \big((1, 0, 1), 1\big),
+        \big((1, 1, 0), 0\big), \big((0, 1, 1), 1\big) \Big\}
+    \]
+    The points in with class label $0$ and $1$ have third coordinates $0$ and $1$, respectively.
+\end{frame}
+
+\begin{frame}{}
+    The plane $$x_3=\frac12$$ separates the classes.
+
+    The points in data space mapped by $\phi$ into this separating plane are those that satisfy
+    \[
+        (x_1 - x_2)^2 = \frac12
+    \]
+    \[
+        x_1 - x_2 = \pm \frac12
+    \]
+    This pair of lines separates the original dataset $D$.
+
+    More examples in the Jupyter notebook.
+\end{frame}
+
+\begin{frame}{Where do features come from?}
+
+    Many classification techniques require features to be hand-crafted for
+    a given application.
+
+    A more robust approach is to, as much as possible, \emph{learn} the features.
+    Neural networks use this approach.
+\end{frame}
+\end{document}
