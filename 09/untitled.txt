@@ -1,0 +1,4 @@
+Fashion MNIST
+- plotting (grid)
+- data tensor: batch_size, height, weight
+- 28 x 28 input -> 256 relu -> 64 reul  -> 10 softmax
